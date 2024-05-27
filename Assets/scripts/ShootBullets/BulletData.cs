@@ -78,7 +78,7 @@ public class BulletData : NetworkBehaviour
             }
             else
             {
-                SetBulletIsActiveServerRpc(false);
+                //SetBulletIsActiveServerRpc(false);
             }
         }
     }
