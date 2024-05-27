@@ -18,6 +18,8 @@ public class StartGameAR : MonoBehaviour
     [SerializeField] private Button StartGameButton;
     [SerializeField] private Button CreateRoomButton;
     [SerializeField] private Button JoinRoomButton;
+    [SerializeField] private GameObject dragonPrefab;
+    public static GameObject dragon;
     private bool isHost;
 
     public static event Action OnStartSharedSpaceHost;
@@ -73,6 +75,8 @@ public class StartGameAR : MonoBehaviour
         if (isHost)
         {
             NetworkManager.Singleton.StartHost();
+            dragon = Instantiate(dragonPrefab);
+            dragon.GetComponent<NetworkObject>().Spawn();
         }
         else
         {
@@ -80,7 +84,10 @@ public class StartGameAR : MonoBehaviour
         }
 
     }
-
+    public static void DragonDead()
+    {
+        Destroy(dragon);
+    }
 
     void StartSharedSpace()
     {
