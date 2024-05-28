@@ -16,15 +16,18 @@ public class DragonBehaviour : NetworkBehaviour
     public static event Action OnDragonHealthChanged;
     private const float MOVE_SPEED = 0.005f;
     private const float MOVE_THRESHOLD = 0.01f;
-
+    private Animator _dragonAnimator;
+    private AnimatorControllerParameter allParams;
+    bool isDie = false;
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
         //Debug.Log("Dragon spawned");
+        _dragonAnimator = GetComponentInChildren<Animator>();
     }
     void Start()
     {
-        
+
     }
 
     // Dragon transforms to the position of the player
@@ -46,7 +49,7 @@ public class DragonBehaviour : NetworkBehaviour
             // Dragon move towards but not too close to the player (MOVE_THRESHOLD away from the player)
             transform.LookAt(playerPosition);
             float distanceToMove = distance - MOVE_THRESHOLD;
-            transform.position = Vector3.MoveTowards(dragonPosition, playerPosition , distanceToMove);
+            transform.position = Vector3.MoveTowards(dragonPosition, playerPosition, distanceToMove);
         }
         else
         {
@@ -62,21 +65,33 @@ public class DragonBehaviour : NetworkBehaviour
         }
 
     }
-
+    IEnumerator set1sec()
+    {
+        yield return new WaitForSeconds(2);
+        isDie = true;
+        Debug.Log("Dragon spawned");
+    }
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Bullet")
         {
-            hp -= 10;
+            if (hp>0) hp -= 10;
+            else
+            {
+                set1sec();
+                if(isDie) StartGameAR.DragonDead();
+            }
         }
+
     }
 
     void OnFlyForwardNearestPlayer()
     {
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Player");
-
+        
         if (gameObjects.Length != 0)
-        {   Transform nearestPlayer = gameObjects[0].transform;
+        {
+            Transform nearestPlayer = gameObjects[0].transform;
             for (int i = 1; i < gameObjects.Length; i++)
             {
                 Vector3 playerPosition = gameObjects[i].GetComponent<NetworkObject>().transform.position;
@@ -93,18 +108,20 @@ public class DragonBehaviour : NetworkBehaviour
 
     public void AttractDragon(Vector3 playerPosition)
     {
-       transform.position = Vector3.MoveTowards(transform.position, playerPosition, 100f);
-    }   
+        transform.position = Vector3.MoveTowards(transform.position, playerPosition, 100f);
+    }
 
     // Update is called once per frame
     void Update()
     {
         if (hp <= 0)
         {
-            StartGameAR.DragonDead();
+            _dragonAnimator.SetBool("die", true);
+            //set1sec();
+            //StartGameAR.DragonDead();
         }
 
         OnFlyForwardNearestPlayer();
-        
+
     }
 }

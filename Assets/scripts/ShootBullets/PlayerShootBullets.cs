@@ -10,9 +10,9 @@ public class PlayerShootBullets : NetworkBehaviour
 
     private const float BULLET_DELAY = .2f;
     private const float SHOOTING_DELAY = .2f;
-    private const float BULLET_SPEED = 2f;
-    private const float BULLET_ANGLE_AMPLYFY = .51f;
-    private const float BULLETSHOOTANGLEMAX = 50;
+    private const float BULLET_SPEED = 5f;
+    private const float BULLET_ANGLE_AMPLYFY = .11f;
+    private const float BULLETSHOOTANGLEMAX = 25;
 
 
     private Transform bulletSpawnTransform;
