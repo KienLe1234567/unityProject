@@ -37,7 +37,13 @@ public class PlayerMovement : NetworkBehaviour
         PlayerLookInMovementDirection(inputMovement);
     }
 
-
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Dragon"))
+        {
+            
+        }
+    }
     void PlayerLookInMovementDirection(Vector3 inputVector)
     {
         Vector3 pointToLookAt = transform.position + (inputVector.normalized * LOOKATPOINT_DELTA);

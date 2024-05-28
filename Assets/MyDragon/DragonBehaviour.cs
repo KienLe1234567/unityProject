@@ -14,8 +14,8 @@ public class DragonBehaviour : NetworkBehaviour
     public static event Action OnApproachingPlayer;
     public static event Action OnDragonDead;
     public static event Action OnDragonHealthChanged;
-    private const float MOVE_SPEED = 0.005f;
-    private const float MOVE_THRESHOLD = 0.01f;
+    private const float MOVE_SPEED = 0.01f;
+    private const float MOVE_THRESHOLD = 0.5f;
     private Animator _dragonAnimator;
     private AnimatorControllerParameter allParams;
     bool isDie = false;
@@ -23,7 +23,7 @@ public class DragonBehaviour : NetworkBehaviour
     public override void OnNetworkSpawn()
     {
         //Debug.Log("Dragon spawned");
-        _dragonAnimator = GetComponentInChildren<Animator>();
+        _dragonAnimator = GetComponentInChildren<NetworkObject>().GetComponent<Animator>();
     }
     void Start()
     {
@@ -41,6 +41,9 @@ public class DragonBehaviour : NetworkBehaviour
         float distance = Vector3.Distance(playerPosition, dragonPosition);
         if (distance < MOVE_THRESHOLD)
         {
+            _dragonAnimator.SetBool("walk", false);
+            _dragonAnimator.SetBool("fly", false);
+            _dragonAnimator.SetBool("attack", true);
             return;
         }
 
@@ -56,30 +59,48 @@ public class DragonBehaviour : NetworkBehaviour
             transform.LookAt(playerPosition);
             if (distance > 50)
             {
-                transform.position = Vector3.MoveTowards(dragonPosition, playerPosition, 1000f);
+                _dragonAnimator.SetBool("attack", false);
+                _dragonAnimator.SetBool("walk", false);
+                _dragonAnimator.SetBool("fly", true);
+                transform.position = Vector3.MoveTowards(dragonPosition, new Vector3(playerPosition.x - 0.5f, playerPosition.y, playerPosition.z - 0.5f), distance);
             }
             else
             {
+                _dragonAnimator.SetBool("attack", false);
+                _dragonAnimator.SetBool("fly", false); ;
+                _dragonAnimator.SetBool("walk", true);
                 transform.position = Vector3.MoveTowards(dragonPosition, playerPosition, MOVE_SPEED);
+
             }
+
         }
 
     }
     IEnumerator set1sec()
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1);
         isDie = true;
-        Debug.Log("Dragon spawned");
+        //Debug.Log("Dragon spawned");
     }
+
     void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag == "Bullet")
         {
-            if (hp>0) hp -= 10;
-            else
+            if (hp > 0)
             {
+                hp -= 10;
+            }
+            else return;
+            
+            if (hp <= 0)
+            {
+                _dragonAnimator.SetBool("fly", false);
+                _dragonAnimator.SetBool("walk", false);
+                _dragonAnimator.SetBool("attack", false);
+                _dragonAnimator.SetBool("die", true);
                 set1sec();
-                if(isDie) StartGameAR.DragonDead();
+                if (isDie) StartGameAR.DragonDead();
             }
         }
 
@@ -116,12 +137,13 @@ public class DragonBehaviour : NetworkBehaviour
     {
         if (hp <= 0)
         {
-            _dragonAnimator.SetBool("die", true);
+
             //set1sec();
             //StartGameAR.DragonDead();
         }
-
-        OnFlyForwardNearestPlayer();
+        else {
+            OnFlyForwardNearestPlayer();
+        }
 
     }
 }
