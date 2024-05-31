@@ -9,7 +9,7 @@ public class PlayerAnimation : NetworkBehaviour
     private PlayerInputControls _playerInputControls;
 
     private AnimatorControllerParameter[] allParams;
-
+    
 
     public override void OnNetworkSpawn()
     {
@@ -25,8 +25,7 @@ public class PlayerAnimation : NetworkBehaviour
             _playerInputControls.OnMoveActionCancelled += PlayerInputControlsOnOnMoveActionCancelled;
             _playerInputControls.OnShootInput += PlayerInputControlsOnOnShootInput;
             _playerInputControls.OnShootInputCancelled += PlayerInputControlsOnOnShootInputCancelled;
-
-
+            //_playerInputControls.PlayerDie += PlayerDiesoon;
         }
     }
 
@@ -45,6 +44,10 @@ public class PlayerAnimation : NetworkBehaviour
         SetOneParameterToTrue("isIdle");
     }
 
+    //private void PlayerDiesoon()
+    //{
+    //    SetOneParameterToTrue("isDie");
+    //}
     private void PlayerInputControlsOnOnMoveInput(Vector3 context)
     {
         if (context.magnitude > 0)
@@ -79,6 +82,7 @@ public class PlayerAnimation : NetworkBehaviour
             _playerInputControls.OnMoveActionCancelled -= PlayerInputControlsOnOnMoveActionCancelled;
             _playerInputControls.OnShootInput -= PlayerInputControlsOnOnShootInput;
             _playerInputControls.OnShootInputCancelled -= PlayerInputControlsOnOnShootInputCancelled;
+            //_playerInputControls.PlayerDie -= PlayerDiesoon;
         }
     }
 }

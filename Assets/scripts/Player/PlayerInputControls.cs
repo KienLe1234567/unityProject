@@ -15,6 +15,7 @@ public class PlayerInputControls : NetworkBehaviour
     public event Action OnMoveActionCancelled;
     public event Action OnShootInput;
     public event Action OnShootInputCancelled;
+    //public event Action PlayerDie;
 
     public event Action<Vector2> OnShootAnglePerformed;
 
@@ -34,7 +35,7 @@ public class PlayerInputControls : NetworkBehaviour
             _playerControlsInputAction.PlayerControlsMap.Shoot.canceled += ShootOncanceled;
 
             _playerControlsInputAction.PlayerControlsMap.ShootAngle.performed += ShootAngleOnperformed;
-
+            //AllPlayerDataManager.Instance.OnPlayerDead += PlayerDeady;
 
         }
     }
@@ -59,7 +60,13 @@ public class PlayerInputControls : NetworkBehaviour
         movementVector = Vector3.zero;
         OnMoveActionCancelled?.Invoke();
     }
-
+    //private void PlayerDeady(ulong obj)
+    //{
+    //    if (IsServer)
+    //    {
+    //        PlayerDie?.Invoke();
+    //    }
+    //}
     private void MoveActionPerformed(InputAction.CallbackContext context)
     {
         Vector2 v2Movement = context.ReadValue<Vector2>();
@@ -84,6 +91,7 @@ public class PlayerInputControls : NetworkBehaviour
             _playerControlsInputAction.PlayerControlsMap.Move.canceled -= MoveActionCancelled;
             _playerControlsInputAction.PlayerControlsMap.Shoot.performed -= ShootOnperformed;
             _playerControlsInputAction.PlayerControlsMap.Shoot.canceled -= ShootOncanceled;
+            //AllPlayerDataManager.Instance.OnPlayerDead -= PlayerDeady;
         }
     }
 }

@@ -5,6 +5,7 @@ using System.Net.NetworkInformation;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
 
 public class DragonBehaviour : NetworkBehaviour
@@ -78,15 +79,16 @@ public class DragonBehaviour : NetworkBehaviour
     }
     IEnumerator set1sec()
     {
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(10);
         isDie = true;
         //Debug.Log("Dragon spawned");
     }
 
-    void OnCollisionEnter(Collision collision)
+    void OnTriggerEnter(Collider collision) //OnCollisionEnter(Collision
     {
         if (collision.gameObject.tag == "Bullet")
         {
+            Debug.Log("ahihi bullet collision with dragon");
             if (hp > 0)
             {
                 hp -= 10;
@@ -101,7 +103,12 @@ public class DragonBehaviour : NetworkBehaviour
                 _dragonAnimator.SetBool("die", true);
                 set1sec();
                 if (isDie) StartGameAR.DragonDead();
+                //SceneManager.LoadScene("youWin", LoadSceneMode.Single);
             }
+        }
+        else if (collision.gameObject.tag == "Player")
+        {
+            Debug.Log("dragon collision with player");
         }
 
     }

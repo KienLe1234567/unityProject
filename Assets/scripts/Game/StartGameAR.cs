@@ -80,6 +80,12 @@ public class StartGameAR : MonoBehaviour
         }
         else
         {
+            //if (!dragon)
+            //{
+            //    GameObject dragon;
+            //    dragon = Instantiate(dragonPrefab);
+            //    dragon.GetComponent<NetworkObject>().Spawn();
+            //}
             NetworkManager.Singleton.StartClient();
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class AllPlayerDataManager : NetworkBehaviour
 {
@@ -68,6 +69,7 @@ public class AllPlayerDataManager : NetworkBehaviour
             NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
         }
         BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
+        HeadHick.OnHitPlayer -= DragonHitPlayer;
         KillPlayer.OnKillPlayer -= KillPlayerOnOnKillPlayer;
         RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
     }
@@ -77,6 +79,7 @@ public class AllPlayerDataManager : NetworkBehaviour
     {
         NetworkManager.Singleton.OnClientConnectedCallback += AddNewClientToList;
         BulletData.OnHitPlayer += BulletDataOnOnHitPlayer;
+        HeadHick.OnHitPlayer += DragonHitPlayer;
         KillPlayer.OnKillPlayer += KillPlayerOnOnKillPlayer;
         RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
     }
@@ -85,6 +88,7 @@ public class AllPlayerDataManager : NetworkBehaviour
     {
         NetworkManager.Singleton.OnClientConnectedCallback -= AddNewClientToList;
         BulletData.OnHitPlayer -= BulletDataOnOnHitPlayer;
+        HeadHick.OnHitPlayer -= DragonHitPlayer;
         KillPlayer.OnKillPlayer -= KillPlayerOnOnKillPlayer;
         RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
     }
@@ -149,7 +153,6 @@ public class AllPlayerDataManager : NetworkBehaviour
 
         return default;
     }
-
     private void BulletDataOnOnHitPlayer((ulong from, ulong to) ids)
     {
         if (IsServer)
@@ -174,6 +177,10 @@ public class AllPlayerDataManager : NetworkBehaviour
                         if (newData.lifePoints <= 0)
                         {
                             OnPlayerDead?.Invoke(ids.to);
+                            //Animator xauso;
+                            //xauso.SetBool("walk", false);
+                            //xauso.SetBool("fly", false);
+                            //xauso.SetBool("attack", true);
                         }
 
 
@@ -185,6 +192,41 @@ public class AllPlayerDataManager : NetworkBehaviour
                     }
                 }
             }
+        }
+
+        SyncReducePlayerHealthClientRpc(ids.to);
+    }
+
+    private void DragonHitPlayer((ulong from, ulong to) ids)
+    {
+        if (IsServer)
+        {
+                for (int i = 0; i < allPlayerData.Count; i++)
+                {
+                    if (allPlayerData[i].clientID == ids.to)
+                    {
+                        int lifePointsToReduce = allPlayerData[i].lifePoints == 0 ? 0 : LIFEPOINTS_TO_REDUCE;
+
+                        PlayerData newData = new PlayerData(
+                            allPlayerData[i].clientID,
+                            allPlayerData[i].score,
+                            allPlayerData[i].lifePoints - 4,
+                            allPlayerData[i].playerPlaced
+                        );
+
+
+
+                        if (newData.lifePoints <= 0)
+                        {
+                            OnPlayerDead?.Invoke(ids.to);
+                        }
+
+                        Debug.Log("Player "+ids.to +" got hit by BOSS so the lifepoints left => " + newData.lifePoints);
+
+                        allPlayerData[i] = newData;
+                        break;
+                    }
+                }
         }
 
         SyncReducePlayerHealthClientRpc(ids.to);

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameUIManager : NetworkBehaviour
 {
@@ -14,6 +15,7 @@ public class GameUIManager : NetworkBehaviour
     private void Start()
     {
         ShowCreateGameCanvas();
+        //AllPlayerDataManager.Instance.OnPlayerDead += LoadSceneLose;
         AllPlayerDataManager.Instance.OnPlayerDead += InstanceOnOnPlayerDead;
         RestartGame.OnRestartGame += RestartGameOnOnRestartGame;
     }
@@ -45,6 +47,14 @@ public class GameUIManager : NetworkBehaviour
         }
     }
 
+    private void LoadSceneLose(ulong obj)
+    {
+        if (IsServer)
+        {
+            SceneManager.LoadScene("youLose", LoadSceneMode.Single);
+        }
+    }
+
     [ClientRpc]
     void PlayerIsDeadClientRpc()
     {
@@ -70,6 +80,7 @@ public class GameUIManager : NetworkBehaviour
 
     public override void OnNetworkDespawn()
     {
+        //AllPlayerDataManager.Instance.OnPlayerDead -= LoadSceneLose;
         AllPlayerDataManager.Instance.OnPlayerDead -= InstanceOnOnPlayerDead;
         RestartGame.OnRestartGame -= RestartGameOnOnRestartGame;
     }

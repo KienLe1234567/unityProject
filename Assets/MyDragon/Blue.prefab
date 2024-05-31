@@ -515,7 +515,8 @@ GameObject:
   m_Component:
   - component: {fileID: 2531841604238742708}
   - component: {fileID: 6800585478621420559}
-  m_Layer: 6
+  - component: {fileID: 5419776037569169243}
+  m_Layer: 8
   m_Name: Head
   m_TagString: DragonHead
   m_Icon: {fileID: 0}
@@ -554,12 +555,24 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 100, y: 100, z: 100}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 118.50668, y: 112.23827, z: 96.2287}
+  m_Center: {x: -46.61791, y: 17.7999, z: -1.8857123}
+--- !u!114 &5419776037569169243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1179309419247997872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 26c8aec5198667645aca356b6edfdd8b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1285247666606980117
 GameObject:
   m_ObjectHideFlags: 0
@@ -569,7 +582,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4392708949052769409}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: UpperHead1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -797,6 +810,7 @@ GameObject:
   - component: {fileID: 8026137592652984430}
   - component: {fileID: 3123593571346790206}
   - component: {fileID: 2337547261228507283}
+  - component: {fileID: -7357120039260329271}
   m_Layer: 6
   m_Name: Blue
   m_TagString: Dragon
@@ -813,7 +827,7 @@ Transform:
   m_GameObject: {fileID: 2226118587117685305}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 2, y: 0, z: 2}
+  m_LocalPosition: {x: 1.404, y: -0.025, z: 2}
   m_LocalScale: {x: 0.12, y: 0.12, z: 0.12}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -920,12 +934,39 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 5.48822, y: 6.197528, z: 6.1801677}
-  m_Center: {x: 0.046417866, y: 2.5987644, z: -2.1991155}
+  m_Size: {x: 5.12764, y: 6.197528, z: 5.8144374}
+  m_Center: {x: 0.046895448, y: 2.5987644, z: -2.3819807}
+--- !u!54 &-7357120039260329271
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2226118587117685305}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 1
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &2285243274693758530
 GameObject:
   m_ObjectHideFlags: 0
@@ -1096,7 +1137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6010172764303250340}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Jaw1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1191,7 +1232,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7450196837327654169}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Jaw3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1993,7 +2034,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7288649379487882253}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: Jaw2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2637,7 +2678,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4133644100375027854}
-  m_Layer: 6
+  m_Layer: 8
   m_Name: UpperHead2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
