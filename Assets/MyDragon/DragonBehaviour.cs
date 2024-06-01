@@ -5,8 +5,8 @@ using System.Net.NetworkInformation;
 using Unity.Netcode;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.XR.ARFoundation;
+using static UnityEngine.UI.GridLayoutGroup;
 
 public class DragonBehaviour : NetworkBehaviour
 {
@@ -42,9 +42,7 @@ public class DragonBehaviour : NetworkBehaviour
         float distance = Vector3.Distance(playerPosition, dragonPosition);
         if (distance < MOVE_THRESHOLD)
         {
-            _dragonAnimator.SetBool("walk", false);
-            _dragonAnimator.SetBool("fly", false);
-            _dragonAnimator.SetBool("attack", true);
+            OnDragonAttackClientRpc();
             return;
         }
 
@@ -60,16 +58,12 @@ public class DragonBehaviour : NetworkBehaviour
             transform.LookAt(playerPosition);
             if (distance > 50)
             {
-                _dragonAnimator.SetBool("attack", false);
-                _dragonAnimator.SetBool("walk", false);
-                _dragonAnimator.SetBool("fly", true);
+                OnDragonFlyClientRpc();
                 transform.position = Vector3.MoveTowards(dragonPosition, new Vector3(playerPosition.x - 0.5f, playerPosition.y, playerPosition.z - 0.5f), distance);
             }
             else
             {
-                _dragonAnimator.SetBool("attack", false);
-                _dragonAnimator.SetBool("fly", false); ;
-                _dragonAnimator.SetBool("walk", true);
+                OnDragonAttackClientRpc();
                 transform.position = Vector3.MoveTowards(dragonPosition, playerPosition, MOVE_SPEED);
 
             }
@@ -77,46 +71,54 @@ public class DragonBehaviour : NetworkBehaviour
         }
 
     }
+
+
     IEnumerator set1sec()
     {
-        yield return new WaitForSeconds(10);
+        yield return new WaitForSeconds(1);
         isDie = true;
         //Debug.Log("Dragon spawned");
     }
 
-    void OnTriggerEnter(Collider collision) //OnCollisionEnter(Collision
+    [ClientRpc]
+    public void OnDragonDeadClientRpc()
     {
-        if (collision.gameObject.tag == "Bullet")
-        {
-            Debug.Log("ahihi bullet collision with dragon");
-            if (hp > 0)
-            {
-                hp -= 10;
-            }
-            else return;
-            
-            if (hp <= 0)
-            {
-                _dragonAnimator.SetBool("fly", false);
-                _dragonAnimator.SetBool("walk", false);
-                _dragonAnimator.SetBool("attack", false);
-                _dragonAnimator.SetBool("die", true);
-                set1sec();
-                if (isDie) StartGameAR.DragonDead();
-                //SceneManager.LoadScene("youWin", LoadSceneMode.Single);
-            }
-        }
-        else if (collision.gameObject.tag == "Player")
-        {
-            Debug.Log("dragon collision with player");
-        }
+        _dragonAnimator.SetBool("fly", false);
+        _dragonAnimator.SetBool("walk", false);
+        _dragonAnimator.SetBool("attack", false);
+        _dragonAnimator.SetBool("die", true);
+    }
+    [ClientRpc]
+    public void OnDragonFlyClientRpc()
+    {
+        _dragonAnimator.SetBool("fly", true);
+        _dragonAnimator.SetBool("walk", false);
+        _dragonAnimator.SetBool("attack", false);
+        _dragonAnimator.SetBool("die", false);
+    }
 
+    [ClientRpc]
+    public void OnDragonWalkClientRpc()
+    {
+        _dragonAnimator.SetBool("fly", false);
+        _dragonAnimator.SetBool("walk", true);
+        _dragonAnimator.SetBool("attack", false);
+        _dragonAnimator.SetBool("die", false);
+    }
+
+    [ClientRpc]
+    public void OnDragonAttackClientRpc()
+    {
+        _dragonAnimator.SetBool("fly", false);
+        _dragonAnimator.SetBool("walk", false);
+        _dragonAnimator.SetBool("attack", true);
+        _dragonAnimator.SetBool("die", false);
     }
 
     void OnFlyForwardNearestPlayer()
     {
         GameObject[] gameObjects = GameObject.FindGameObjectsWithTag("Player");
-        
+
         if (gameObjects.Length != 0)
         {
             Transform nearestPlayer = gameObjects[0].transform;
@@ -142,13 +144,15 @@ public class DragonBehaviour : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (hp <= 0)
+        if (DragonDataManager.Instance.hp.Value <= 0)
         {
 
             //set1sec();
             //StartGameAR.DragonDead();
+            OnDragonDeadClientRpc();
         }
-        else {
+        else
+        {
             OnFlyForwardNearestPlayer();
         }
 

@@ -203,14 +203,14 @@ public class AllPlayerDataManager : NetworkBehaviour
         {
                 for (int i = 0; i < allPlayerData.Count; i++)
                 {
-                    if (allPlayerData[i].clientID == ids.to)
+                    if (allPlayerData[i].clientID == ids.to && allPlayerData[i].lifePoints > 0)
                     {
                         int lifePointsToReduce = allPlayerData[i].lifePoints == 0 ? 0 : LIFEPOINTS_TO_REDUCE;
 
                         PlayerData newData = new PlayerData(
                             allPlayerData[i].clientID,
                             allPlayerData[i].score,
-                            allPlayerData[i].lifePoints - 4,
+                            allPlayerData[i].lifePoints - 3,
                             allPlayerData[i].playerPlaced
                         );
 

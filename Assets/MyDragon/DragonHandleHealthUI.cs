@@ -12,12 +12,31 @@ public class DragonHandleHealthUI : NetworkBehaviour
 
     public override void OnNetworkSpawn()
     {
-        _mainCamera = GameObject.FindObjectOfType<Camera>();   
+        _mainCamera = GameObject.FindObjectOfType<Camera>();
+        DragonDataManager.Instance.OnDragonHealthChanged += InstanceOnDragonHealthChangedServerRpc;
 
+    }
+    public override void OnNetworkDespawn()
+    {
+        DragonDataManager.Instance.OnDragonHealthChanged -= InstanceOnDragonHealthChangedServerRpc;
+    }
+
+    [ServerRpc(RequireOwnership = false)]
+    private void InstanceOnDragonHealthChangedServerRpc()
+    {
+        SetHealthTextClientRpc();
+    }
+
+    [ClientRpc]
+    void SetHealthTextClientRpc()
+    {
+        HealthText.text = DragonDataManager.Instance.hp.Value.ToString();
     }
     private void Update()
     {
-        HealthText.text = DragonBehaviour.hp.ToString();
+        //HealthText.text = DragonBehaviour.hp.ToString();
+        SetHealthTextClientRpc();
+
         if (_mainCamera)
         {
             HealthText.transform.LookAt(_mainCamera.transform);

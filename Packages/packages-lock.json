@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.nianticlabs.lightship": {
-      "version": "file:H:/download/ardk-upm-3.3.0.tgz",
+      "version": "file:D:/Unity/ardk-upm-3.3.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {
@@ -16,7 +16,7 @@
       }
     },
     "com.nianticlabs.lightship.sharedar": {
-      "version": "file:H:/download/sharedar-upm-3.3.0.tgz",
+      "version": "file:D:/Unity/sharedar-upm-3.3.0.tgz",
       "depth": 0,
       "source": "local-tarball",
       "dependencies": {

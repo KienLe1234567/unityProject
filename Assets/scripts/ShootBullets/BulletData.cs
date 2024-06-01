@@ -10,6 +10,7 @@ public class BulletData : NetworkBehaviour
     private NetworkVariable<bool> isActiveSelf = new(true);
 
     public static event Action<(ulong from, ulong to)> OnHitPlayer;
+    public static event Action OnHitDragon;
 
     private const int MAX_FLY_TIME = 4;
 
@@ -70,17 +71,23 @@ public class BulletData : NetworkBehaviour
                     SetBulletIsActiveServerRpc(false);
                     return;
                 }
-                else if (collision.gameObject.layer == LayerMask.NameToLayer("Dragon"))
-                {
-                    Debug.Log("Bullet has Collision to Dragon");
-                    return;
-                }
+
             }
             else
             {
                 //SetBulletIsActiveServerRpc(false);
                 return;
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider collision)
+    {
+        if (collision.gameObject.layer == LayerMask.NameToLayer("Dragon"))
+        {
+            Debug.Log("Bullet has Collision to Dragon");
+            OnHitDragon?.Invoke();
+            return;
         }
     }
 }
