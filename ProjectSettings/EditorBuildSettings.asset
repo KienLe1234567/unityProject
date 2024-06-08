@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/Game.unity
+    guid: 9fc0d4010bbf28b4594072e72b8655ab
+  - enabled: 1
+    path: Assets/Scenes/LoadScene.unity
+    guid: ea5d206138b0e8c40b0119cc9b5409b4
+  - enabled: 1
+    path: Assets/Scenes/youLose.unity
+    guid: 351a01071492d8d4eb3d6aa30c65838e
+  - enabled: 1
+    path: Assets/Scenes/youWin.unity
+    guid: 542ddda0a7e95424aa5dadea4db275e3
+  m_configObjects:
+    Niantic.Lightship.AR.LightshipSettings: {fileID: 11400000, guid: 55a8b64e60d8e0c44bbef85714b3c024, type: 2}
+    UnityEditor.XR.ARCore.ARCoreSettings: {fileID: 11400000, guid: 5762573bc58049a4292ab34e54881bf9, type: 2}
+    UnityEditor.XR.ARKit.ARKitSettings: {fileID: 11400000, guid: 1bf1d6eb7f4224b4ca3b668b2fddaecf, type: 2}
+    com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 0f74cdf707c264f408a985c603be780a, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: 8a5e8ba16e29be84fb471bd0fbfa6508, type: 2}
+    com.unity.xr.openxr.settings4: {fileID: 11400000, guid: f32d2bc98a0678e4c875f55753d5f054, type: 2}
