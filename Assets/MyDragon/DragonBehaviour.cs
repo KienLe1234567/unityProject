@@ -7,6 +7,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using static UnityEngine.UI.GridLayoutGroup;
+using System.Threading.Tasks;
+using UnityEngine.SceneManagement;
 
 public class DragonBehaviour : NetworkBehaviour
 {
@@ -19,7 +21,7 @@ public class DragonBehaviour : NetworkBehaviour
     private const float MOVE_THRESHOLD = 0.5f;
     private Animator _dragonAnimator;
     private AnimatorControllerParameter allParams;
-    bool isDie = false;
+    public bool isWin = false;
     // Start is called before the first frame update
     public override void OnNetworkSpawn()
     {
@@ -76,7 +78,7 @@ public class DragonBehaviour : NetworkBehaviour
     IEnumerator set1sec()
     {
         yield return new WaitForSeconds(1);
-        isDie = true;
+        //isDie = true;
         //Debug.Log("Dragon spawned");
     }
 
@@ -133,7 +135,19 @@ public class DragonBehaviour : NetworkBehaviour
             }
 
             MoveTowardsPlayer(nearestPlayer.position);
+        } else
+        {
+            _dragonAnimator.SetBool("fly", false);
+            _dragonAnimator.SetBool("walk", false);
+            _dragonAnimator.SetBool("attack", false);
+            _dragonAnimator.SetBool("die", false);
         }
+    }
+    public async void LoadSceneYouWin()
+    {
+        isWin = true;
+        await Task.Delay(4000);
+        SceneManager.LoadScene("youWin", LoadSceneMode.Single);
     }
 
     public void AttractDragon(Vector3 playerPosition)
@@ -147,9 +161,11 @@ public class DragonBehaviour : NetworkBehaviour
         if (DragonDataManager.Instance.hp.Value <= 0)
         {
 
-            //set1sec();
-            //StartGameAR.DragonDead();
-            OnDragonDeadClientRpc();
+            if (!isWin)
+            {
+                OnDragonDeadClientRpc();
+                LoadSceneYouWin();
+            }
         }
         else
         {

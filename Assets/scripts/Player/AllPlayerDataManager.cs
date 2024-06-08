@@ -161,7 +161,7 @@ public class AllPlayerDataManager : NetworkBehaviour
             {
                 for (int i = 0; i < allPlayerData.Count; i++)
                 {
-                    if (allPlayerData[i].clientID == ids.to)
+                    if (allPlayerData[i].clientID == ids.to && allPlayerData[i].lifePoints > 0)
                     {
                         int lifePointsToReduce = allPlayerData[i].lifePoints == 0 ? 0 : LIFEPOINTS_TO_REDUCE;
 
@@ -177,10 +177,6 @@ public class AllPlayerDataManager : NetworkBehaviour
                         if (newData.lifePoints <= 0)
                         {
                             OnPlayerDead?.Invoke(ids.to);
-                            //Animator xauso;
-                            //xauso.SetBool("walk", false);
-                            //xauso.SetBool("fly", false);
-                            //xauso.SetBool("attack", true);
                         }
 
 
@@ -216,12 +212,12 @@ public class AllPlayerDataManager : NetworkBehaviour
 
 
 
-                        if (newData.lifePoints <= 0)
-                        {
-                            OnPlayerDead?.Invoke(ids.to);
-                        }
+                    if (newData.lifePoints <= 0)
+                    {
+                        OnPlayerDead?.Invoke(ids.to);
+                    }
 
-                        Debug.Log("Player "+ids.to +" got hit by BOSS so the lifepoints left => " + newData.lifePoints);
+                    Debug.Log("Player "+ids.to +" got hit by BOSS so the lifepoints left => " + newData.lifePoints);
 
                         allPlayerData[i] = newData;
                         break;

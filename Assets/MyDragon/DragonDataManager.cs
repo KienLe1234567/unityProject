@@ -7,7 +7,7 @@ using System;
 public class DragonDataManager : NetworkBehaviour
 {
     public static DragonDataManager Instance;
-    public NetworkVariable<int> hp;
+    public NetworkVariable<int> hp = new NetworkVariable<int>(100);
     public bool isDie = false;
     public event Action OnDragonDead;
     public event Action OnDragonHealthChanged;

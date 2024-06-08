@@ -15,7 +15,7 @@ public class PlayerInputControls : NetworkBehaviour
     public event Action OnMoveActionCancelled;
     public event Action OnShootInput;
     public event Action OnShootInputCancelled;
-    //public event Action PlayerDie;
+    public event Action PlayerDie;
 
     public event Action<Vector2> OnShootAnglePerformed;
 
@@ -64,7 +64,7 @@ public class PlayerInputControls : NetworkBehaviour
     //{
     //    if (IsServer)
     //    {
-    //        PlayerDie?.Invoke();
+   //         PlayerDie?.Invoke();
     //    }
     //}
     private void MoveActionPerformed(InputAction.CallbackContext context)
